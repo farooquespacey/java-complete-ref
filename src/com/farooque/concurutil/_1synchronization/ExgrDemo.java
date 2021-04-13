@@ -1,0 +1,73 @@
+package com.farooque.concurutil._1synchronization;
+// An example of Exchanger. 
+ 
+import java.util.concurrent.Exchanger; 
+ 
+class ExgrDemo { 
+  public static void main(String args[]) { 
+    Exchanger<String> exgr = new Exchanger<String>(); 
+ 
+    new UseString(exgr, "A"); 
+    new MakeString(exgr, "B"); 
+  } 
+} 
+ 
+// A Thread that constructs a string. 
+class MakeString implements Runnable { 
+  Exchanger<String> ex; 
+  String str; 
+  String name;
+ 
+  MakeString(Exchanger<String> c, String nm) { 
+    ex = c; 
+    name = nm;
+    str = new String(); 
+ 
+    new Thread(this, name).start(); 
+  } 
+ 
+  public void run() { 
+    char ch = 'A'; 
+ 
+    for(int i = 0; i < 3; i++) { 
+ 
+      // Fill Buffer 
+      for(int j = 0; j < 5; j++) 
+        str += ch++; 
+ 
+      try { 
+        // Exchange a full buffer for an empty one. 
+        str = ex.exchange(str); 
+        System.out.println(name + " -> Got: " + str); 
+      } catch(InterruptedException exc) { 
+        System.out.println(exc); 
+      } 
+    }         
+  } 
+} 
+ 
+// A Thread that uses a a string. 
+class UseString implements Runnable { 
+  Exchanger<String> ex; 
+  String str; 
+  String name;
+  
+  UseString(Exchanger<String> c, String nm) { 
+    ex = c; 
+    name = nm;
+    new Thread(this, name).start(); 
+  } 
+ 
+  public void run() { 
+ 
+    for(int i=0; i < 3; i++) {       
+      try { 
+        // Exchange an empty buffer for a full one. 
+        str = ex.exchange(new String()); 
+        System.out.println(name + " -> Got: " + str); 
+      } catch(InterruptedException exc) { 
+        System.out.println(exc); 
+      } 
+    }    
+  } 
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products>
+	<product>
+		<sku>12854</sku>
+		<productId>1051806941102</productId>
+		<name>Manufacturer - Test sku - Color</name>
+		<source>bestbuy</source>
+		<type>HardGood</type>
+		<startDate>2000-03-01</startDate>
+		<new>false</new>
+		<department>PHOTO/COMMODITIES</department>
+	</product>
+</products>
